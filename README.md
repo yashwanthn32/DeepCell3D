@@ -16,35 +16,35 @@ Finally, the entire system was deployed as a user-friendly web application. We u
 
 System Architecture
 
-![Proposed Architecture](https://github.com/user-attachments/assets/87f0b716-f488-44a8-a915-7aac0fe52069)
+<img width="1920" height="1080" alt="Proposed Architecture" src="https://github.com/user-attachments/assets/43923222-5a6a-4305-93a7-a6ce087d9acd" />
 
 CNN Architecture
 
-![CNN architecture - Advanced](https://github.com/user-attachments/assets/c2eac7bc-2c96-4116-b15d-e8a617244bd7)
+<img width="1920" height="1080" alt="CNN architecture - Advanced" src="https://github.com/user-attachments/assets/f67cca34-227d-4772-9963-3ded4f386401" />
 
 ## EVALUATION METRICS
 
 Model Accuracy over Epochs
 
-![Model Accuracy](https://github.com/user-attachments/assets/bb75d54b-4fe1-4db9-8323-11eeb339f989)
+<img width="1130" height="743" alt="Model Accuracy" src="https://github.com/user-attachments/assets/3245a709-4059-4edb-b579-2c5a2174f9b8" />
 
 Model Loss over Epochs
 
-![Model Loss](https://github.com/user-attachments/assets/8d433a0f-3081-46fa-bd93-8d78ef417a5d)
+<img width="1108" height="739" alt="Model Loss" src="https://github.com/user-attachments/assets/66f3ac47-e643-4d6f-aeee-621b6c35c7c1" />
 
 ## RESULTS
 
 Initial Interface of Webpage 
 
-![Screenshot 2025-05-25 184808](https://github.com/user-attachments/assets/b71f5167-a4ed-4f60-8337-c981aec09b4c)
+<img width="1919" height="861" alt="Screenshot 2025-05-25 184808" src="https://github.com/user-attachments/assets/64db471b-d5dd-4200-a7f7-7d3ba61d9982" />
 
 Interface of Webpage after Uploading, Predicting and Generating 3D Model of Microscopic Image
 
-![Screenshot 2025-05-25 184735](https://github.com/user-attachments/assets/70d6dd3d-3112-4ac9-8f9c-0d28be4eb2cb)
+<img width="1919" height="859" alt="Screenshot 2025-05-25 184735" src="https://github.com/user-attachments/assets/805fcb28-0f75-472d-a5bf-5f82e8dc9129" />
 
 Maximized View of Generated 3D Structure of Predicted White Blood Cell
 
-![Screenshot 2025-05-25 190349](https://github.com/user-attachments/assets/15749651-9ac5-4e2d-9994-ba208d3d24fc)
+<img width="1690" height="1025" alt="Screenshot 2025-05-25 190349" src="https://github.com/user-attachments/assets/2f29ec9e-790b-4450-b677-e88d8ad14166" />
 
 ## Thank You !!
 
