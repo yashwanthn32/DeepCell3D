@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - Blood Cell Classifier & 3D Model Viewer</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Alegreya&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Alegreya', serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            color: #333;
+            overflow: auto; /* Allow scrolling for content */
+            background-image: url('/static/images/background_image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        nav {
+            background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+            backdrop-filter: blur(10px); /* Add blur effect */
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it is on top of other content */
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 30px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            color: white;
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: background 0.3s ease, color 0.3s ease; /* Add transition for color */
+            border-radius: 5px; /* Add border radius for rounded corners */
+        }
+
+        nav ul li a:hover {
+            color: #ff0000; /* Change text color on hover */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 100px auto 50px auto; /* Adjust top margin to clear fixed nav */
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Archivo Black', sans-serif;
+            color: #780b0b;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #555;
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        .section-heading {
+            font-family: 'Archivo Black', sans-serif;
+            color: #780b0b;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #780b0b;
+            padding-bottom: 5px;
+            display: inline-block; /* To make border-bottom fit content */
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/project_details.html">Project Details</a></li>
+            <li><a href="/about_us.html">About Us</a></li>
+            <li><a href="/contact_us.html">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Project Details</h1>
+        <p>
+           Welcome to the detailed overview of our project, "Deep Learning-Based 3D Visualization of Blood Cells Using Microscopic Imaging." This initiative is designed to automate the classification of white blood cells (WBCs) while enhancing their interpretation through advanced artificial intelligence and 3D visualization techniques. By integrating a Convolutional Neural Network (CNN) for image classification with interactive 3D models developed using Blender, the system delivers both diagnostic assistance and educational utility. The application accurately identifies four primary WBC types—Lymphocytes, Monocytes, Neutrophils, and Eosinophils—from stained microscopic blood smear images and renders their corresponding 3D structures in real time within a web-based interface. Developed using a Flask backend and powered by Three.js for 3D rendering, the platform bridges the gap between computational analysis and biomedical education, providing an intuitive and accessible tool for clinicians, researchers, and students alike.
+        </p>
+        <h2 class="section-heading">Motivation</h2>
+        <p>
+            The motivation behind this project stems from the critical role that white blood cell (WBC) analysis plays in diagnosing various medical conditions, including infections, immune disorders, and hematologic malignancies. Traditional WBC classification methods rely heavily on manual microscopic examination, which is time-consuming, prone to human error, and requires skilled professionals—resources that may not always be readily available, especially in under-resourced regions. With the growing demand for fast, accurate, and scalable diagnostic tools, there is a pressing need to adopt intelligent systems that can support and enhance clinical workflows. Additionally, conventional 2D images limit the understanding of complex cell morphology, which is essential for both diagnostics and education. This project was inspired by the potential of deep learning and 3D visualization to transform WBC analysis into a more precise, efficient, and engaging process—making it not only a powerful diagnostic aid but also a valuable educational tool for students and healthcare professionals.
+        </p>
+
+        <h2 class="section-heading">Technology Stack</h2>
+        <p>
+            The project utilizes a robust and modern technology stack to ensure high performance, accuracy, and user interactivity. The backend is developed using Python and Flask, enabling efficient model integration and server-side processing. TensorFlow and Keras are used to build and train the Convolutional Neural Network (CNN) for white blood cell classification. For 3D visualization, Blender is used to model the cells, while Three.js handles the rendering of these models in the web interface. The frontend is built with HTML, CSS, and JavaScript, ensuring a responsive and interactive user experience. This combination of tools supports seamless data flow from image input to real-time classification and visualization.
+        </p>
+
+        <h2 class="section-heading">Methodology</h2>
+        <p>
+            The methodology of our project is centered on building a seamless pipeline that combines deep learning for image classification with 3D visualization for enhanced understanding. We began by sourcing high-quality microscopic images of white blood cells (WBCs) from publicly available datasets. These images, representing four major WBC types—Lymphocytes, Monocytes, Neutrophils, and Eosinophils—underwent preprocessing steps such as resizing, noise reduction, contrast enhancement, and normalization. To improve model generalization and address class imbalance, we employed data augmentation techniques like rotation, flipping, and scaling.
+        </p> 
+        <p>
+            For the classification task, we developed a Convolutional Neural Network (CNN) designed to learn and extract intricate morphological features from the blood smear images. The model includes layers such as convolutional layers with ReLU activation, batch normalization for stable training, max pooling for dimensionality reduction, and fully connected layers for classification. The final output layer uses the Softmax function to predict the specific WBC class. The CNN achieved high training and validation accuracy with minimal overfitting, as reflected in our evaluation metrics.
+        </p>
+        <p>
+            To complement the AI-driven predictions, we created detailed 3D models of each WBC type using Blender, an open-source 3D modeling software. These models provide a dynamic and spatial perspective of the cells, allowing users to interact with and explore their structures in real time. The 3D visualization helps bridge the gap between theoretical knowledge and practical understanding of cellular morphology.
+        </p>
+        <p>
+            Finally, the entire system was deployed as a user-friendly web application. We used Flask for the backend to handle image uploads, preprocessing, and CNN inference. The frontend was developed with HTML, CSS, JavaScript, and Three.js, which renders the 3D cell models directly in the browser. This integration ensures that users can easily upload an image, receive a prediction, and view the corresponding 3D model—all within a responsive and interactive web environment.
+        </p>
+
+        <h2 class="section-heading">Future Enhancements</h2>
+        <p>
+            In future iterations, the system can be enhanced by including more blood cell types like Basophils and abnormal cells to improve diagnostic range. Integrating technologies such as Holography, Augmented Reality (AR), and Virtual Reality (VR) can offer more immersive and interactive ways to visualize and explore cell structures, especially in educational and clinical training settings.
+        </p>    
+         <p>
+            On the AI front, using advanced models like transformers or attention-based networks could boost classification accuracy. Additionally, linking the system with electronic health records (EHRs) would enable real-time diagnostics and patient-specific insights. These enhancements aim to evolve the platform into a comprehensive and intelligent tool for both learning and medical analysis.
+        </p>
+    </div>
+
+</body>
+</html>

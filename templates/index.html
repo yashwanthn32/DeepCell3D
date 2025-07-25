@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Cell Classifier & 3D Model Viewer</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Alegreya&display=swap" rel="stylesheet">
+
+    
+    <style>
+        body {
+            font-family: 'Alegreya', serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
+            background-image: url('/static/images/background_image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        nav {
+            background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+            backdrop-filter: blur(10px); /* Add blur effect */
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it is on top of other content */
+        }
+
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 30px;
+
+        }
+
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            color: white;
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: background 0.3s ease, color 0.3s ease; /* Add transition for color */
+            border-radius: 5px; /* Add border radius for rounded corners */
+        }
+
+
+        nav ul li a:hover {
+            color: #ff0000; /* Change text color on hover */
+        }
+
+        h1 {
+            font-size: 40px;
+            font-family: 'Archivo Black', sans-serif;
+            text-align: left;
+            margin-top: 150px;
+            margin-left: 50px;
+            color: #780b0b;
+            width: 40%;
+        }
+
+        h2 {
+            font-family: 'Archivo Black', sans-serif;;
+        }
+
+
+        #upload-form {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            margin-bottom: 0px;
+            margin-left: 40px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-button,
+        .predict-button {
+            background: transparent; /* Set background to transparent */
+            color: rgb(0, 0, 0); /* Initial text color in black */
+            font-size: 13px;
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: bold;
+            border: 2px solid #780b0b; /* Border color */
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            position: relative; /* Position for gradient fill */
+            overflow: hidden; /* Hide overflow for animation */
+            transition: color 0.3s ease; /* Transition for text color */
+            border-radius: 5px; /* Optional: Add some border-radius */
+        }
+
+        .upload-button::before,
+        .predict-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #780b0b, #071316); /* Gradient color */
+            z-index: -1; /* Place behind the button text */
+            transform: scaleY(0); /* Start hidden */
+            transform-origin: bottom; /* Set origin for scaling */
+            transition: transform 0.3s ease; /* Animation for gradient fill */
+        }
+
+        .upload-button:hover,
+        .predict-button:hover,
+        .upload-button:active,
+        .predict-button:active {
+            color: white; /* Change text color to white on hover and click */
+        }
+
+        .upload-button:hover::before,
+        .predict-button:hover::before {
+            transform: scaleY(1); /* Fill button on hover */
+        }
+
+        .upload-button:active,
+        .predict-button:active {
+            transform: translateY(2px); /* Button click effect */
+        }
+
+
+        #model-section {
+            margin-top: 20px;
+            margin-left: 50px;
+            text-align: left;
+            position: fixed;
+            display: flex;
+            /* Adjust this value to move it left */
+        }
+
+
+        model-viewer {
+            position: fixed;
+            width: 26%;
+            height: 250px;
+            background-color: rgba(50, 50, 50, 0.8); /* Semi-transparent white background */
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+    
+
+        #maximize-button, #minimize-button {
+            position: fixed;
+            top: 410px;
+            left: 55px;
+            background: transparent;
+            border: none;
+            font-weight: bolder;
+            font-size: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+        }
+
+        #minimize-button {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            z-index: 9999;
+        }
+        
+        #cell-description-container {
+            position: fixed;
+            top: 20%; /* Center vertically */
+            right: 10%; /* Position from the right */
+            transform: translateY(-50%); /* Center the container vertically */
+            padding: 20px;
+            width: 30%;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #555;
+            font-size: 18px;
+            display: none;
+        }
+
+        #cell-description {
+            padding: 10px;
+            text-align: justify;
+            font-family: 'Alegreya', serif;
+
+        }
+        .slide-in {
+            animation: slideIn 0.5s forwards; /* Animation duration and direction */
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%); /* Start from the right */
+                opacity: 0; /* Fade in */
+            }
+            to {
+                transform: translateX(0); /* End at the original position */
+                opacity: 1; /* Fully visible */
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s forwards; /* Animation duration */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0; /* Start fully transparent */
+            }
+            to {
+                opacity: 1; /* End fully visible */
+            }
+        }
+
+        
+
+
+    </style>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li> 
+            <li><a href="/project_details.html">Project Details</a></li> 
+            <li><a href="/about_us.html">About Us</a></li>
+            <li><a href="/contact_us.html">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <h1>Deep Learning Based 3D Visualization of Blood Cells using Microscopic Imaging</h1>
+
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" id="file-input" required />
+        <button type="button" class="upload-button" id="upload-button">Upload Image</button>
+        <button type="button" class="predict-button hidden" id="predict-button" onclick="makePrediction()">Predict</button>
+        <button type="button" class="upload-button hidden" id="generate-button" onclick="generate3DModel()">Generate 3D Model</button>
+    </form>
+
+    <div id="prediction-result"></div>
+
+    <div id="model-section" class="hidden">
+        <model-viewer id="model-viewer" src="" alt="3D Model" ar auto-rotate camera-controls></model-viewer>
+        <button id="maximize-button" onclick="toggleFullscreen()" style="display:none;">⛶</button> <button id="minimize-button" onclick="toggleFullscreen()">▬</button>
+        <div id="cell-description-container">
+            <div id="cell-description" class="hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        
+        const modelSection = document.getElementById('model-section');
+        const predictionResult = document.getElementById('prediction-result');
+        const fileInput = document.getElementById('file-input');
+        const modelViewer = document.getElementById('model-viewer');
+        const minimizeButton = document.getElementById('minimize-button');
+        const cellDescription = document.getElementById('cell-description');
+        const cellDescriptionContainer = document.getElementById('cell-description-container');
+        let predictionData = null;
+
+        document.getElementById('upload-button').addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files.length > 0) {
+                const formData = new FormData(document.getElementById('upload-form'));
+
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        predictionResult.textContent = data.error;
+                    } else {
+                        predictionData = data;
+                        document.getElementById('predict-button').classList.remove('hidden');
+                        document.getElementById('generate-button').classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during the prediction process:', error);
+                });
+            }
+        });
+
+        function makePrediction() {
+            if (predictionData && predictionData.prediction) {
+        
+                // Create a heading for the cell type
+                const cellTypeHeading = `<h2>${predictionData.prediction}</h2>`;
+                
+                // Get the corresponding cell description
+                const descriptionText = `Description: ${getCellDescription(predictionData.prediction)}`;
+                
+                // Set the inner HTML to include both the heading and description
+                cellDescription.innerHTML = `${cellTypeHeading} ${descriptionText}`;
+                cellDescription.classList.remove('hidden');
+                
+                // Show the description container with slide-in animation
+                cellDescriptionContainer.style.display = 'block';
+                cellDescriptionContainer.classList.add('slide-in'); // Add the slide-in class
+                
+                // Show generate button after prediction
+                document.getElementById('generate-button').classList.remove('hidden'); 
+            } else {
+                predictionResult.textContent = 'Error in prediction. Please try again.';
+            }
+        }
+
+        function getCellDescription(prediction) {
+            const descriptions = {
+                "EOSINOPHIL": "Eosinophils are a type of white blood cell that play a vital role in the body’s immune response, particularly in combating parasitic infections and mediating allergic reactions. These cells are characterized by their large, bright red granules when stained, and they typically possess a bi-lobed nucleus. The granules contain various enzymes and toxic proteins that can damage or kill parasites, making eosinophils essential for fighting off parasitic diseases.",
+                "LYMPHOCYTE": "Lymphocytes are a diverse group of white blood cells essential for the adaptive immune response. This category includes B cells, T cells, and natural killer (NK) cells. Lymphocytes have a large, spherical nucleus that occupies most of the cell volume, with a thin rim of cytoplasm that stains darker than other white blood cells due to their high nuclear content. B cells are responsible for producing antibodies that target specific pathogens, T cells are involved in killing infected host cells and regulating other immune cells, and natural killer cells play a crucial role in defending against tumors and virally infected cells, making lymphocytes key players in the body’s immune system.",
+                "MONOCYTE": "Monocytes are the largest type of white blood cell and are integral to the innate immune system. Upon migrating into tissues, they differentiate into macrophages and dendritic cells, enhancing their ability to fight infections. Monocytes are characterized by a kidney-shaped or oval nucleus and a relatively large amount of cytoplasm, staining less intensely than other white blood cells. Their primary functions include phagocytosis, antigen presentation, and the regulation of immune responses, as they play a vital role in cleaning up dead cells and debris within the body.",
+                "NEUTROPHIL": "Neutrophils are the most abundant type of white blood cell and serve as a crucial component of the innate immune system. They act as the first responders to sites of infection or injury, rapidly moving to the affected area. Neutrophils are characterized by their multi-lobed nucleus, usually consisting of three to five lobes, and fine, pale-staining granules in their cytoplasm that contain enzymes and antimicrobial substances. Their primary function is to ingest and destroy bacteria and fungi through a process called phagocytosis, and they release reactive oxygen species and other inflammatory mediators that help to recruit additional immune cells to the site of infection.",
+            };
+            return descriptions[prediction] || "Description not available.";
+        }
+
+        function generate3DModel() {
+            if (predictionData && predictionData.prediction) {
+                const predictedClass = predictionData.prediction;
+                const modelUrl = `/static/models/${predictedClass}.glb`; // Update with your model paths
+
+                modelViewer.src = modelUrl;
+                
+                // Ensure the model section is shown without animation
+                modelSection.classList.remove('hidden');
+                modelViewer.style.display = 'block';
+
+                // Clear any existing animation classes
+                modelSection.classList.remove('fade-in');
+                
+                // Apply the fade-in animation
+                void modelViewer.offsetWidth; // Trigger reflow to restart the animation
+                modelViewer.classList.add('fade-in'); // Add the fade-in animation class
+
+                // Show the maximize button only after generating the model
+                document.getElementById('maximize-button').style.display = 'block';
+            }
+        }
+
+        function toggleFullscreen() {
+            if (modelViewer.requestFullscreen) {
+                modelViewer.requestFullscreen();
+            } else if (modelViewer.mozRequestFullScreen) { // Firefox
+                modelViewer.mozRequestFullScreen();
+            } else if (modelViewer.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                modelViewer.webkitRequestFullscreen();
+            } else if (modelViewer.msRequestFullscreen) { // IE/Edge
+                modelViewer.msRequestFullscreen();
+            }
+            modelSection.classList.add('fullscreen');
+            modelViewer.style.width = '100vw';
+            modelViewer.style.height = '100vh';
+            minimizeButton.style.display = 'block';
+            document.getElementById('maximize-button').style.display = 'none'; // Hide maximize button
+            document.getElementById('cell-description-container').style.display = 'none'; // Hide cell description container
+        }
+
+        // Listen for the exit fullscreen event
+        document.addEventListener("fullscreenchange", exitFullscreen);
+        document.addEventListener("mozfullscreenchange", exitFullscreen);
+        document.addEventListener("webkitfullscreenchange", exitFullscreen);
+        document.addEventListener("msfullscreenchange", exitFullscreen);
+
+        function exitFullscreen() {
+            if (!document.fullscreenElement) {
+                modelSection.classList.remove('fullscreen');
+                modelViewer.style.width = '26%';
+                modelViewer.style.height = '250px';
+                minimizeButton.style.display = 'none';
+                document.getElementById('maximize-button').style.display = 'block'; // Show maximize button
+                document.getElementById('cell-description-container').style.display = 'block'; // Show cell description container
+            }
+        }
+        
+        function makePrediction() {
+            if (predictionData && predictionData.prediction) {
+        
+                // Create a heading for the cell type
+                const cellTypeHeading = `<h2>${predictionData.prediction}</h2>`;
+                
+                // Get the corresponding cell description
+                const descriptionText = `Description: ${getCellDescription(predictionData.prediction)}`;
+                
+                // Set the inner HTML to include both the heading and description
+                cellDescription.innerHTML = `${cellTypeHeading} ${descriptionText}`;
+                cellDescription.classList.remove('hidden');
+                
+                // Show the description container with slide-in animation
+                cellDescriptionContainer.style.display = 'block';
+                cellDescriptionContainer.classList.add('slide-in'); // Add the slide-in class
+                
+                // Show generate button after prediction
+                document.getElementById('generate-button').classList.remove('hidden'); 
+            } else {
+                predictionResult.textContent = 'Error in prediction. Please try again.';
+            }
+        }
+
+        function generate3DModel() {
+            if (predictionData && predictionData.prediction) {
+                const predictedClass = predictionData.prediction;
+                const modelUrl = `/static/models/${predictedClass}.glb`; // Update with your model paths
+
+                modelViewer.src = modelUrl;
+                
+                // Ensure the model section is shown without animation
+                modelSection.classList.remove('hidden');
+                modelViewer.style.display = 'block';
+
+                // Clear any existing animation classes
+                modelSection.classList.remove('fade-in');
+                
+                // Apply the fade-in animation
+                void modelViewer.offsetWidth; // Trigger reflow to restart the animation
+                modelViewer.classList.add('fade-in'); // Add the fade-in animation class
+
+                // Show the maximize button only after generating the model
+                document.getElementById('maximize-button').style.display = 'block';
+            }
+        }
+
+    </script>
+</body>
+</html>
